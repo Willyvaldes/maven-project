@@ -1,96 +1,56 @@
-pipeline {
-    agent any
+ pipeline {
+        agent any
+		
+        stages {
 
-    stages {
+          stage("Code testing") {
+            agent any
+            steps {
+              withSonarQubeEnv('sonarqube') {
+                sh 'mvn clean  test sonar:sonar'
+              }
+            }
+          }
 
-        stage('clean') {
-            agent {
-                 docker { image 'maven:3.8.5-openjdk-8-slim' }
-             }
+          stage("maven Build") {
+            steps {
+               withSonarQubeEnv('sonarqube') {
+                sh 'mvn clean install package  sonar:sonar'
+              }
+            }
+          }
 
+
+
+          stage("build images ") {
             steps {
                sh '''
-              mvn clean
-               '''
+                sudo docker rmi -f kemvoueric/maven:latest  || true
+                sudo docker build -t kemvoueric/maven  .
+			   '''
             }
-        }
+          }
+		  
 
-        stage('compile') {
-            agent {
-                 docker { image 'maven:3.8.5-openjdk-8-slim' }
-             }
-
+          stage("pushing to dockerhub ") {
             steps {
                sh '''
-             mvn compile
-               '''
+                docker push  kemvoueric/maven:latest
+			   '''
             }
-        }
+          }
 
-stage('validate') {
-    agent {
-                 docker { image 'maven:3.8.5-openjdk-8-slim' }
-             }
 
+
+          stage("deploy to tomcat ") {
             steps {
                sh '''
-               mvn validate
-               '''
+                docker run -itd -p 8888:8080 kemvoueric/maven:latest
+			   '''
             }
+          }
+
+
+
         }
-
-
-
-stage('test') {
-    agent {
-                 docker { image 'maven:3.8.5-openjdk-8-slim' }
-             }
-
-            steps {
-               sh '''
-             mvn test 
-               '''
-            }
-        }
-
-stage('package') {
-    agent {
-                 docker { image 'maven:3.8.5-openjdk-8-slim' }
-             }
-
-            steps {
-               sh '''
-              mvn package
-               '''
-            }
-        }
-
-stage('verify') {
-    agent {
-                 docker { image 'maven:3.8.5-openjdk-8-slim' }
-             }
-
-            steps {
-               sh '''
-              mvn verify
-               '''
-            }
-        }
-
-
-stage('install') {
-    agent {
-                 docker { image 'maven:3.8.5-openjdk-8-slim' }
-             }
-
-            steps {
-               sh '''
-           mvn install
-               '''
-            }
-        }
-       
-
-
-    }
-}
+      }
