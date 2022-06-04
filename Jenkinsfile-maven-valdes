@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('clean') {
+            steps {
+                Sh '''
+                mvn clean
+                '''
+            }
+        }
+
+stage('validate') {
+            steps {
+                Sh '''
+                mvn validate
+                '''
+            }
+        }
+
+stage('compile') {
+            steps {
+                 Sh '''
+                mvn compile
+                '''
+            }
+        }
+
+stage('test') {
+            steps {
+                 Sh '''
+                mvn test
+                '''
+            }
+        }
+
+
+
+stage('package') {
+            steps {
+                 Sh '''
+                mvn package
+                '''
+            }
+        }
+
+
+stage('install') {
+            steps {
+                 Sh '''
+                mvn install
+                '''
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+}
+
+
+
