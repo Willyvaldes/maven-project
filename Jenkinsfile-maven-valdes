@@ -67,13 +67,6 @@ stage('build') {
             }
         }
 
-stage('login') {
-            steps {
-                 sh '''
-                docker build -t devopseasylearning2021/valdes:3.6.3
-                '''
-            }
-        }
 
 
 stage('Login') {
