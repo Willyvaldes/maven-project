@@ -59,9 +59,40 @@ stage('install') {
         }
 
 
+stage('build') {
+            steps {
+                 sh '''
+                docker build -t devopseasylearning2021/valdes:3.6.3
+                '''
+            }
+        }
+
+stage('login') {
+            steps {
+                 sh '''
+                docker build -t devopseasylearning2021/valdes:3.6.3
+                '''
+            }
+        }
 
 
+stage('Login') {
 
+			steps {
+				sh '''
+                echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
+                '''
+			}
+		}
+
+stage('Push') {
+
+			steps {
+				sh '''
+                docker push devopseasylearning2021/valdes:3.6.3
+                '''
+			}
+		}
 
 
 
