@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('clean') {
             steps {
-                Sh '''
+                sh '''
                 mvn clean
                 '''
             }
@@ -12,7 +12,7 @@ pipeline {
 
 stage('validate') {
             steps {
-                Sh '''
+                sh '''
                 mvn validate
                 '''
             }
@@ -20,7 +20,7 @@ stage('validate') {
 
 stage('compile') {
             steps {
-                 Sh '''
+                 sh '''
                 mvn compile
                 '''
             }
@@ -28,7 +28,7 @@ stage('compile') {
 
 stage('test') {
             steps {
-                 Sh '''
+                 sh '''
                 mvn test
                 '''
             }
@@ -38,7 +38,7 @@ stage('test') {
 
 stage('package') {
             steps {
-                 Sh '''
+                 sh '''
                 mvn package
                 '''
             }
@@ -47,7 +47,7 @@ stage('package') {
 
 stage('install') {
             steps {
-                 Sh '''
+                 sh '''
                 mvn install
                 '''
             }
