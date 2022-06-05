@@ -59,6 +59,15 @@ stage('install') {
         }
 
 
+stage('Initialize'){
+    steps {
+        sh '''
+        def dockerHome = tool '/usr/bin/docker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+        '''
+    }
+    }
+
 
 stage('build') {
             steps {
